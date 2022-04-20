@@ -4,6 +4,7 @@ metadata:
   name: fluent-bit-windows-config
   labels:
     app: fluent-bit-windows
+  namespace: winpool-system
 data:
   fluent-bit.conf: |
     [SERVICE]
@@ -24,7 +25,7 @@ data:
     [INPUT]
         Name              tail
         Tag               iis.*
-        Path              C:\\var\\log\\iis\\**\\*.log,C:\\var\\log\\iis\\*.log
+        Path              C:\\inetpub\\logs\\logFiles\\**\\*.log
         Parser            iis
         DB                /var/log/flb_iis.db
         Skip_Long_Lines   On
@@ -35,37 +36,6 @@ data:
         Channels          Setup,Windows PowerShell,Application,System,Security
         Interval_Sec      60
         DB                winlog.sqlite
-
-
-    [FILTER]
-        Name                kubernetes
-        Match               kube.*
-        Kube_URL            https://kubernetes.default.svc.cluster.local:443
-        Kube_CA_File        /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-        Kube_Token_File     /var/run/secrets/kubernetes.io/serviceaccount/token
-        Merge_Log           On
-        Merge_Log_Key       log_processed
-        K8S-Logging.Parser  On
-        K8S-Logging.Exclude Off
-        Kube_Tag_Prefix     kube.c.var.log.containers.
-
-    [FILTER]
-        Name                nest
-        Match               kube.*
-        Operation           lift
-        Nested_Under        kubernetes
-
-    # [OUTPUT]
-    #     Name          syslog
-    #     Match          *
-    #     Host          OUTPUT-ADDRESS
-    #     Port          OUTPUT-PORT
-    #     Mode          MODE  
-    #     syslog_format rfc5424
-    #     Syslog_Hostname_key  host
-    #     Syslog_Appname_key   pod_name
-    #     Syslog_Procid_key    container_name
-    #     Syslog_Message_key   log
 
     [OUTPUT]
         Name          file
@@ -100,7 +70,7 @@ metadata:
   labels:
     app: fluent-bit-windows
   name: fluent-bit-windows
-  namespace: pks-system
+  namespace: winpool-system
 spec:
   selector:
     matchLabels:
@@ -118,7 +88,7 @@ spec:
         value: "2019"
         effect: "NoSchedule"
       containers:
-      - image: fluent-bit-1.9
+      - image: kjsimages.azurecr.io/fluent/fluent-bit-1.9.1
         imagePullPolicy: IfNotPresent
         name: fluent-bit
         volumeMounts:
@@ -140,6 +110,7 @@ spec:
           defaultMode: 420
           name: fluent-bit-windows-config                                       
         name: fluent-bit-windows-config
-      serviceAccountName: fluent-bit-win
+      imagePullSecrets:
+      - name: kjs-acr-pullsecret
   updateStrategy:
     type: RollingUpdate

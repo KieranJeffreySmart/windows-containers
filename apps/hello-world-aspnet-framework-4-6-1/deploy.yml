@@ -52,6 +52,7 @@ spec:
       imagePullSecrets:
       - name: kjs-acr-pullsecret
 ---
+
 apiVersion: v1
 kind: Service
 metadata:

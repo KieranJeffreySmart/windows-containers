@@ -3,7 +3,9 @@ date = "2022-01-25T12:00:00+02:00"
 tags = ["Windows containers", "docker", "kubernetes"]
 title = "Building docker images on Windows VM"
 ---
-# Windows Containerisation Setup
+# Windows Containerization Setup
+In order to containerize a legacy windows application you will need a compatible environment from which to build 
+
 ## Windows 10 Docker Install
 Follow the steps below in order to install Docker on Windows 10 build 19041 or later.
 

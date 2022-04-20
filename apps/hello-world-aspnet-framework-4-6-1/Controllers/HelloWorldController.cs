@@ -39,7 +39,7 @@ namespace HelloWorld.AsyncProxy.Framework
         [Route("HelloEx")]
         public string ExceptionalHelloWorld()
         {
-            throw new Exception("Hello World!!!");
+            throw new Exception("An Exceptional Hello World!!!");
         }
     }
 }

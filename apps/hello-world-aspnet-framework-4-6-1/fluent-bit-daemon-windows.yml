@@ -25,22 +25,22 @@ data:
     [INPUT]
         Name              tail
         Tag               iis.*
-        Path              C:\\inetpub\\logs\\logFiles\\**\\*.log
+        Path              C:\\var\\log\\iis\\**\\*.log
         Parser            iis
         DB                /var/log/flb_iis.db
         Skip_Long_Lines   On
         Refresh_Interval  60
-
+        
     [INPUT]
         Name              winlog
         Channels          Setup,Windows PowerShell,Application,System,Security
         Interval_Sec      60
-        DB                winlog.sqlite
+        DB                /var/log/winlog.sqlite
 
     [OUTPUT]
         Name          file
         Match         *
-        Path          /tmp/output.txt
+        Path          /tmp
   
   parsers.conf: |
     [PARSER]
@@ -91,21 +91,33 @@ spec:
       - image: kjsimages.azurecr.io/fluent/fluent-bit-1.9.1
         imagePullPolicy: IfNotPresent
         name: fluent-bit
+        command: [fluent-bit]
+        args:
+        - --config
+        - /fluent-bit/etc/fluent-bit.conf
+        - -i winlog
+        workingDir: /fluent-bit/etc
         volumeMounts:
+        - mountPath: /fluent-bit/etc
+          name: fluent-bit-windows-config
+        - mountPath: "/tmp/"
+          name: logoutput
         - mountPath: /var/log
           name: varlog
           readOnly: false
-        - mountPath: /fluent-bit/etc
-          name: fluent-bit-windows-config
-        - mountPath: "E:"
-          name: rootcontainers
+        - mountPath: /ProgramData/docker/containers
+          name: dockercontainers
+          readOnly: true
       volumes:
+      - name: logoutput
+        hostPath:
+          path: /tmp
       - name: varlog
         hostPath:
           path: /var/log
-      - name: rootcontainers
+      - name: dockercontainers
         hostPath:
-          path: E:/
+          path: /ProgramData/docker/containers
       - configMap:
           defaultMode: 420
           name: fluent-bit-windows-config                                       

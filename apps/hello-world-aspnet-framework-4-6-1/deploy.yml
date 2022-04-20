@@ -22,9 +22,6 @@ spec:
       - name: varlog
         hostPath:
           path: /var/log 
-      - name: logoutput
-        hostPath:
-          path: /tmp
       tolerations:
       - key: "windows"
         operator: "Equal"
@@ -32,7 +29,7 @@ spec:
         effect: "NoSchedule"
       containers:
       - name: hello-world-f461
-        image: kjsimages.azurecr.io/hello-world-aspnet-framework-4-6-1:0.1
+        image: kjsimages.azurecr.io/hello-world-aspnet-f461:0.2
         ports:
         - containerPort: 5050
         volumeMounts:
@@ -40,8 +37,6 @@ spec:
             mountPath: /dmp
           - name: varlog
             mountPath: "/var/log/"
-          - name: logoutput
-            mountPath: "/tmp/"
         resources:
           requests:
             cpu: 250m

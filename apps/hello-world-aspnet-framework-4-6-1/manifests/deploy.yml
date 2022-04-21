@@ -31,7 +31,7 @@ spec:
         effect: "NoSchedule"
       containers:
       - name: hello-world-f461
-        image: kjsimages.azurecr.io/hello-world-aspnet-f461:0.2
+        image: kjsimages.azurecr.io/hello-world-aspnet-f461:0.6
         ports:
         - containerPort: 5050
         volumeMounts:
@@ -48,7 +48,7 @@ spec:
             memory: 5Gi
         readinessProbe:
           httpGet:
-            path: /api/HelloWorld
+            path: /healthy
             port: 80
           initialDelaySeconds: 1
           timeoutSeconds: 1
@@ -56,7 +56,7 @@ spec:
           periodSeconds: 10
         livenessProbe:
           httpGet:
-            path: /api/HelloWorld
+            path: /alive
             port: 80
           initialDelaySeconds: 5
           timeoutSeconds: 10

@@ -2,7 +2,7 @@
 
 In order to release you will need at least one Windows Agent. Follow this [guide](https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/v2-windows?view=azure-devops) to create a self-host agent in Azure Devops.
 
-You should already have created a build pipeline to trigger the release. For more information on creating a build pipeline follow this [guide](/PBS-Tanzu-Engagement-Discoveries/Containerising-A-Windows-Application/Create-an-Azure-DevOps-build-pipeline)
+You should already have created a build pipeline to trigger the release.
 
 You will need to create a service connection for the cluster you want to deploy to. Follow this [guide](https://docs.microsoft.com/en-us/azure/devops/pipelines/library/service-endpoints?view=azure-devops&tabs=yaml) to create and manage service connections on Azure Devops.
 
@@ -254,7 +254,7 @@ You can start from an empty pipeline and add the stages and task as described be
 								"percentage": "0",
 								"baselineAndCanaryReplicas": "1",
 								"manifests": "$(System.DefaultWorkingDirectory)/_my-application/manifests/my-application-deployment.yml",
-								"containers": "tanzu-sandbox-harbor.principality.net/library/my-application:$(Release.Artifacts._my-application.BuildNumber)\n",
+								"containers": "my-container-registry/my-application:$(Release.Artifacts._my-application.BuildNumber)\n",
 								"imagePullSecrets": "",
 								"renderType": "helm",
 								"dockerComposeFile": "",
@@ -331,8 +331,7 @@ You can start from an empty pipeline and add the stages and task as described be
 				"gatesOptions": null,
 				"gates": []
 			},
-			"environmentTriggers": [],
-			"badgeUrl": "https://vsrm.dev.azure.com/principalitybs/_apis/public/Release/badge/e6400032-c4c0-4f95-aff2-d719c39f8d02/12/12"
+			"environmentTriggers": []
 		}
 	],
 	"artifacts": [

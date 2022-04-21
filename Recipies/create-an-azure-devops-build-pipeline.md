@@ -2,12 +2,12 @@
 
 In order to build and deploy you will need at least one Windows Agent. Follow this [guide](https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/v2-windows?view=azure-devops) to create a self-host agent in Azure Devops.
 
-To perform a build there should be a version control repository such as Git, containing all binaries, a dockerfile, tokenized config files and deployment manifests. Changes to this repository will trigger the build.
+To perform a build there should be a version control repository such as Git, from which binaries and a dockerfile can be used to build an image. You might also include any tokenized config files and deployment manifests for later release tasks.
 
 # Build Pipeline
 
 A CI pipeline is a process to build, test and publish artifacts. 
-Whle it would be possible to perform these tasks on an existing pipeline that builds code and publishes binaries, the approach described here assumes the artifacts from the original application build can be served to an independent pipeline focused purely on containerization and deployment to kubernetes.
+While it would be possible to perform these tasks on an existing pipeline that builds code and publishes binaries, the approach described here assumes the artifacts from the original application build can be served to an independent pipeline focused purely on containerization and deployment to kubernetes.
 
 The containerization build pipeline will pull the contents of a version control repository containing the pre-built binaries. It should the build and push an image of an application container, to an image registry such as Harbor. 
 
@@ -40,7 +40,7 @@ steps:
 
 - task: Docker@2
   inputs:
-        containerRegistry: 'tanzu-sandbox-harbor_service_connection'
+        containerRegistry: 'my-container-registry-service-connection'
         repository: $(repoName)
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'

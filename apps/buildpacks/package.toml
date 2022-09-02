@@ -1,0 +1,5 @@
+[buildpack]
+uri = "../buildpacks/buildpacks/dotnet-framework"
+
+[platform]
+os = "windows"

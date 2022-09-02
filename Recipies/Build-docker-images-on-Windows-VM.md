@@ -51,6 +51,21 @@ To install docker you must open Powershell as an administrator
 ```ps
 powershell Start-Process powershell -Verb runAs
 ```
+
+## Windows Server 2019 Update Docker
+```ps
+Find-Package -Name Docker -ProviderName DockerMSFTProvider
+
+Install-Package -Name Docker -ProviderName DockerMSFTProvider -Update -Force
+
+Restart-Service docker
+```
+
+## Windows Server 2019 enabling remote access to daemon
+```ps
+netsh advfirewall firewall add rule name="ICMP Allow incoming V4 echo request" protocol=icmpv4:8,any dir=in action=allow
+```
+
 ### Install and configure Docker
 - Enable and Docker Provider and install docker package:
 	```ps
